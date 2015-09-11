@@ -1,7 +1,10 @@
 package Ciklum;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
+import Ciklum.pages.BasePage;
+import Ciklum.pages.Page;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.Capabilities;
 
@@ -22,6 +25,7 @@ public class TestNgTestBase {
   protected static String gridHubUrl;
   protected static String baseUrl;
   protected static Capabilities capabilities;
+  protected Page page;
 
   protected WebDriver driver;
 
@@ -34,11 +38,15 @@ public class TestNgTestBase {
     }
     capabilities = PropertyLoader.loadCapabilities();
     WebDriverFactory.setMode(WebDriverFactoryMode.THREADLOCAL_SINGLETON);
+    driver = WebDriverFactory.getDriver(gridHubUrl, capabilities);
+    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    page = new BasePage(driver);
+
   }
 
   @BeforeMethod
   public void initWebDriver() {
-    driver = WebDriverFactory.getDriver(gridHubUrl, capabilities);
+
   }
 
   @AfterSuite(alwaysRun = true)
